@@ -1,0 +1,52 @@
+kind: VirtualMachine
+metadata:
+name: test-vm
+namespace: default
+spec:
+running: true
+template:
+  metadata:
+    labels:
+      kubevirt.io/name: test-vm
+  spec:
+    domain:
+      cpu:
+        threads: 1
+        cores: 1
+        sockets: 1
+      memory:
+        guest: "1G"
+      devices:
+        autoattachPodInterface: true # true by default, explicitly setting for clarity
+        disks:
+        - name: bootdisk
+          disk:
+            bus: virtio
+        - name: cloud-init
+          disk:
+            bus: virtio
+        interfaces:
+        - name: default
+          masquerade: {}
+    terminationGracePeriodSeconds: 0
+    networks:
+    - name: default
+      pod: {}
+    volumes:
+    - name: bootdisk
+      containerDisk:
+        image: camelcasenotation/ubuntu1604-containerdisk:latest
+    - name: cloud-init
+      cloudInitNoCloud:
+        userData: |-
+          #cloud-config
+          users:
+            - name: root
+              ssh-authorized-keys:
+                - $YOUR_KEY_HERE
+          ssh_pwauth: True
+          password: $YOUR_PASSWORD_HERE
+          chpasswd:
+            expire: False
+            list: |-
+               root:$YOUR_PASSWORD_HERE

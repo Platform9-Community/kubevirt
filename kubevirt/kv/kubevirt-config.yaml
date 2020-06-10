@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  debug.useEmulation: "true"
+  feature-gates: LiveMigration
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: kubevirt-config
+  namespace: kubevirt

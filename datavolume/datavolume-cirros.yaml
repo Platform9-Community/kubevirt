@@ -1,0 +1,16 @@
+apiVersion: cdi.kubevirt.io/v1alpha1
+kind: DataVolume
+metadata:
+  name: cirros-template
+  namespace: default
+spec:
+  source:
+    http:
+      url: "https://download.cirros-cloud.net/0.4.0/cirros-0.4.0-x86_64-disk.img"
+  pvc:
+    storageClassName: $STORAGECLASS_NAME
+    accessModes:
+    - $ACCESS_MODES
+    resources:
+      requests:
+        storage: $STORAGE_REQUEST
